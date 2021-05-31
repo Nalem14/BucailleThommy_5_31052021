@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --config webpack.config.js --mode production",
+    "serve": "webpack serve  --mode development"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,23 @@
   "bugs": {
     "url": "https://github.com/Nalem14/BucailleThommy_5_31052021/issues"
   },
-  "homepage": "https://github.com/Nalem14/BucailleThommy_5_31052021#readme"
+  "homepage": "https://github.com/Nalem14/BucailleThommy_5_31052021#readme",
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.0",
+    "bootstrap-icons": "^1.4.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.2.5",
+    "css-loader": "^5.2.4",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^1.6.0",
+    "node-sass": "^5.0.0",
+    "postcss": "^8.2.13",
+    "postcss-loader": "^5.2.0",
+    "sass-loader": "^11.0.1",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
+  }
 }
