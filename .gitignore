@@ -1,0 +1,5 @@
+.vscode/
+node_modules/
+.idea/
+assets/dist/
+.DS_Store
