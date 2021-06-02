@@ -35,9 +35,12 @@ main {
                 overflow: hidden;
                 border: 3px solid #FFF;
                 border-radius: 5px;
+                margin-top: 20px;
+                margin-bottom: 20px;
 
                 @media screen AND (min-width: 768px) {
                     width: 40%;
+                    margin: 0;
                     margin-left: 20px;
                 }
 
@@ -56,16 +59,16 @@ main {
                     text-align: center;
                 }
 
+                & > div {
+                    margin-bottom: 40px;
+                }
+
                 @media screen AND (min-width: 768px) {
                     text-align: left;
                     flex-basis: 50%;
 
                     select {
                         text-align: left;
-                    }
-
-                    & > div {
-                        margin-bottom: 40px;
                     }
                 }
             }
@@ -75,10 +78,6 @@ main {
                 margin-top: 0;
                 margin-bottom: 20px;
                 text-decoration: none;
-
-                @media screen AND (min-width: 768px) {
-                    flex-basis: 50%;
-                }
             }
         }
 
