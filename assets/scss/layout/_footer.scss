@@ -7,6 +7,10 @@ footer {
         display: flex;
         flex-direction: column;
 
+        @media screen AND (min-width: 1400px) {
+            margin-left: 130px;
+        }
+
         h2 {
             margin-top: 20px;
             font-size: 1.3em;
