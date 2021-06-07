@@ -54,7 +54,28 @@ main {
             div {
                 text-align: center;
                 flex-basis: 100%;
+                position: relative;
 
+                p {
+                    margin-bottom: 30px;
+                }
+
+                span {
+                    font-weight: 600;
+                    background-color: $color-secondary;
+                    height: 30px;
+                    width: 120px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    color: #FFF;
+                    margin-bottom: 20px;
+                }
+
+                label {
+                    font-weight: 700;
+                }
                 select {
                     text-align: center;
                 }
@@ -75,9 +96,10 @@ main {
 
             .btn {
                 width: 100%;
-                margin-top: 0;
+                margin-top: 20px;
                 margin-bottom: 20px;
                 text-decoration: none;
+                font-size: 1em;
             }
         }
 

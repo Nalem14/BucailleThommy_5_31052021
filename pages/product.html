@@ -33,7 +33,7 @@
     </header>
 
     <main>
-      <section id="product-item">
+      <div id="product-item">
         <article>
           <h2>Produit Nom</h2>
 
@@ -42,27 +42,37 @@
           </figure>
 
           <div>
-            <a href="./cart.html" class="btn">Ajouter au panier</a>
-            <div>
-              <label for="color">Couleur</label>
-              <select name="color" id="color">
-                <option value="0">Noir</option>
-                <option value="1" selected="selected">Marron</option>
-                <option value="2">Bleu</option>
-                <option value="3">Vert</option>
-                <option value="4">Rouge</option>
-              </select>
-            </div>
-
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
               fugiat neque aliquam voluptatem sunt. Consectetur facilis nobis
               numquam dignissimos explicabo rem exercitationem tempore, dolores
               dolorum repellendus adipisci! Tempore, omnis suscipit.
             </p>
+
+            <span>Prix: 500€</span>
+
+            <form action="./cart.html" method="post">
+              <div>
+                <label for="color">Couleur</label>
+                <select name="color" id="color">
+                  <option value="0">Noir</option>
+                  <option value="1" selected="selected">Marron</option>
+                  <option value="2">Bleu</option>
+                  <option value="3">Vert</option>
+                  <option value="4">Rouge</option>
+                </select>
+              </div>
+              <div>
+                <label for="quantity">Quantité</label>
+                <select name="quantity" id="quantity">
+                  <option value="1">1</option>
+                </select>
+              </div>
+              <button type="submit" class="btn">Ajouter au panier</button>
+            </form>
           </div>
         </article>
-      </section>
+      </div>
     </main>
 
     <footer>
