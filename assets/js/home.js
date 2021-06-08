@@ -14,14 +14,14 @@ window.addEventListener("DOMContentLoaded", (event) => {
     })
 });
 
-async function LoadProducts(category) {
+function LoadProducts(category) {
     let container = document.getElementById("products-container");
     container.innerHTML = "Chargement...";
 
-    return fetch('http://localhost:3000/api/' + category)
+    fetch('http://localhost:3000/api/' + category)
     .then(response => response.json())
     .then(datas => {
-        console.log(datas);
+        //console.log(datas);
         let content = "";
         datas.forEach(element => {
             content += `
@@ -45,5 +45,6 @@ async function LoadProducts(category) {
     })
     .catch(error => {
         console.log(error);
+        container.innerHTML = "Erreur : " + error;
     });
 }
