@@ -6,19 +6,25 @@ main {
 
     #call-to-action {
         background-color: #f7f7f7;
-        margin-top: 20px;
+        margin-top: 30px;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
         align-items: center;
         border-bottom: 3px solid #e6e1e1;
-        box-shadow: -50px 0px 50px -7px #C9C9C9, 50px 0px 50px -7px #C9C9C9;
+        //box-shadow: -50px 0px 50px -7px #C9C9C9, 50px 0px 50px -7px #C9C9C9;
+        padding: 20px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
 
         h2 {
             margin-top: 40px;
             margin-bottom: 20px;
             font-size: 1.3em;
             font-weight: 700;
+            flex-basis: 100%;
+            text-align: center;
         }
         p {
             max-width: 600px;
@@ -32,6 +38,25 @@ main {
             margin-top: 20px;
             margin-bottom: 40px;
         }
+        button {
+            height: 48px;
+            flex-basis: 30%;
+            border: 1px solid $color-secondary;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: border .2s linear;
+
+            &:hover {
+                transition: border .4s linear;
+                border: 3px solid lighten($color: $color-secondary, $amount: 40);
+            }
+
+            &:active {
+                transition: border .2s linear;
+                border: 3px solid darken($color: $color-secondary, $amount: 15);
+            }
+        }
     }
 
     #products {
@@ -43,6 +68,7 @@ main {
         border-bottom-right-radius: 0;
         margin: 10px;
         margin-top: 40px;
+        position: relative;
 
         @media screen AND (min-width: 1200px) {
             margin: 0;
@@ -71,6 +97,7 @@ main {
                 border-top-right-radius: 20px;
                 box-shadow: 0px 0px 12px 1px #C9C9C9;
                 margin-top: 30px;
+                position: relative;
 
                 @media screen AND (min-width: 768px) {
                     flex-basis: 48%;
@@ -78,6 +105,22 @@ main {
 
                 @media screen AND (min-width: 992px) {
                     flex-basis: 31.5%;
+                }
+
+                span {
+                    position: absolute;
+                    right: 20px;
+                    top: 20px;
+                    font-weight: 600;
+                    background-color: darken($color: $color-secondary, $amount: 10);
+                    opacity: .7;
+                    height: 30px;
+                    width: 80px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    text-align: center;
+                    color: #FFF;
                 }
 
                 a {

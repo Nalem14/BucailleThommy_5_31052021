@@ -39,16 +39,27 @@ main {
 
         > div {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             flex-wrap: wrap;
             justify-content: space-between;
             text-align: center;
             margin: 0 auto;
             margin-bottom: 40px;
+            margin-top: 10px;
             max-width: 600px;
+
+            @media screen AND (min-width: 640px) {
+                flex-direction: row;
+            }
 
             p {
                 font-weight: 600;
+                margin-top: 20px;
+            }
+
+            .btn {
+                margin-left: 20px;
+                margin-top: 10px;
             }
         }
 
