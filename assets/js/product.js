@@ -14,8 +14,13 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     const id = url.searchParams.get("id");
     const category = url.searchParams.get("category");
 
-    // Get and show product from URL
+    // Get product from URL
+    // Also set window title and description
     const result = await GetProduct(category, id);
+    document.title = result.name + " - Orinoco";
+    document.querySelector('meta[name="description"]').setAttribute("content", result.description);
+
+    // Render product datas in HTML
     ShowProduct(result);
 });
 
