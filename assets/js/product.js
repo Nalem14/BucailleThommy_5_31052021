@@ -1,7 +1,9 @@
 window.addEventListener("DOMContentLoaded", async (event) => {
+
+    // Get the select element for quantity
     const selectQuantity = document.getElementById('quantity');
 
-    // Show quantity select
+    // Render quantity select options
     for(var i = 0; i < 10; i++) {
         var opt = document.createElement('option');
         opt.value = i+1;
@@ -14,9 +16,10 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     const id = url.searchParams.get("id");
     const category = url.searchParams.get("category");
 
-    // Get product from URL
-    // Also set window title and description
+    // Get product from params
     const result = await GetProduct(category, id);
+
+    // Set window title and meta description
     document.title = result.name + " - Orinoco";
     document.querySelector('meta[name="description"]').setAttribute("content", result.description);
 
@@ -47,7 +50,7 @@ function ShowProduct(_result) {
     document.getElementById("product-price").innerHTML = _result.price + "€";
 
     // Check for specifics options in select and get the correct array
-    // to show it
+    // to render it
     if("colors" in _result) {
         ShowOptions(_result.colors);
         document.getElementById("options-name").innerHTML = "Couleur";
@@ -67,7 +70,7 @@ function ShowProduct(_result) {
 function ShowOptions(_options) {
     const selectOption = document.getElementById("options");
 
-    // For each options, add it to the options select
+    // For each options, add it to the 'options' select
     _options.forEach(element => {
         console.log(element);
         var opt = document.createElement('option');
