@@ -51,10 +51,20 @@ main {
         
         article {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: space-between;
             align-items: center;
             margin: 10px 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            &:nth-child(odd) {
+                background-color: #eeeeee;
+            }
+
+            @media screen AND (min-width: 640px) {
+                flex-direction: row;
+            }
 
             h3 {
                 font-size: 1.2em;
@@ -86,11 +96,6 @@ main {
                 border-radius: 5px;
                 margin-right: 15px;
                 margin-left: 15px;
-                display: none;
-
-                @media screen AND (min-width: 640px) {
-                    display: initial;
-                }
 
                 img {
                     width: 100%;
@@ -101,12 +106,12 @@ main {
 
             span {
                 font-weight: 600;
-                margin: 0 15px;
+                margin: 15px 15px;
             }
 
             a {
                 color: darken($color-primary, 10);
-                margin: 0 15px;
+                margin: 15px 15px;
             }
         }
     }
