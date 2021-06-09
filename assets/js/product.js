@@ -46,30 +46,55 @@ async function GetProduct(_category, _id) {
     });
 }
 
-function ShowProduct(_result) {
+function ShowProduct(_product) {
     // Set datas in view
 
-    document.getElementById("product-name").innerHTML = _result.name;
-    document.getElementById("product-img").src = _result.imageUrl;
-    document.getElementById("product-description").innerHTML = _result.description;
-    document.getElementById("product-price").innerHTML = _result.price + "€";
+    document.getElementById("product-name").innerHTML = _product.name;
+    document.getElementById("product-img").src = _product.imageUrl;
+    document.getElementById("product-description").innerHTML = _product.description;
+    document.getElementById("product-price").innerHTML = _product.price + "€";
 
     // Check for specifics options in select and get the correct array
     // to render it
-    if("colors" in _result) {
-        ShowOptions(_result.colors);
-        document.getElementById("options-name").innerHTML = "Couleur";
+    let key = GetOptionKey(_product);
+    ShowOptions(_product[key]);
+    document.getElementById("options-name").innerHTML = GetOptionName(key);
+}
+
+function GetOptionKey(product) {
+    if("colors" in product)
+        return "colors";
+
+    if("lenses" in product)
+        return "lenses";
+
+    if("varnish" in product)
+        return "varnish";
+
+    return "Unknown";
+}
+
+function GetOptionName(key) {
+    let name = "";
+    switch (key) {
+        case "colors":
+            name = "Couleur";
+            break;
+
+        case "lenses":
+            name = "Lentille";
+            break;
+        
+        case "varnish":
+            name = "Vernis";
+            break;
+    
+        default:
+            name = "Unknown";
+            break;
     }
 
-    if("lenses" in _result) {
-        ShowOptions(_result.lenses);
-        document.getElementById("options-name").innerHTML = "Lentille";
-    }
-
-    if("varnish" in _result) {
-        ShowOptions(_result.varnish);
-        document.getElementById("options-name").innerHTML = "Vernis";
-    }
+    return name;
 }
 
 function ShowOptions(_options) {
@@ -89,12 +114,16 @@ function AddToCart(event, _product) {
     event.preventDefault();
     event.stopPropagation();
 
+    let option_key = GetOptionKey(_product.type);
+
     let product = {
         id: _product._id,
         name: _product.name,
+        type: _product.type,
         description: _product.description,
         imageUrl: _product.imageUrl,
         price: _product.price,
+        option_name: GetOptionName(option_key),
         option: document.getElementById("options").value,
         qty: document.getElementById("quantity").value
     };
