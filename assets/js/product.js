@@ -123,8 +123,8 @@ function AddToCart(event, _product) {
         description: _product.description,
         imageUrl: _product.imageUrl,
         price: _product.price,
-        option_name: GetOptionName(option_key),
-        option: document.getElementById("options").value,
+        optionName: GetOptionName(option_key),
+        optionValue: document.getElementById("options").value,
         qty: document.getElementById("quantity").value
     };
 
