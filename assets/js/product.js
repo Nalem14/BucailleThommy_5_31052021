@@ -27,7 +27,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     ShowProduct(PRODUCT);
 
     // Listen when submit Add to cart
-    document.getElementById("add-to-cart-form").addEventListener("click", (event) => {
+    document.getElementById("add-to-cart-form").addEventListener("submit", (event) => {
         AddToCart(event, PRODUCT);
     });
 });
