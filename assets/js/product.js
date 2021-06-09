@@ -13,18 +13,23 @@ window.addEventListener("DOMContentLoaded", async (event) => {
 
     // Get URL params
     const url = new URL(window.location.href);
-    const id = url.searchParams.get("id");
-    const category = url.searchParams.get("category");
+    const ID = url.searchParams.get("id");
+    const CATEGORY = url.searchParams.get("category");
 
     // Get product from params
-    const result = await GetProduct(category, id);
+    const PRODUCT = await GetProduct(CATEGORY, ID);
 
     // Set window title and meta description
-    document.title = result.name + " - Orinoco";
-    document.querySelector('meta[name="description"]').setAttribute("content", result.description);
+    document.title = PRODUCT.name + " - Orinoco";
+    document.querySelector('meta[name="description"]').setAttribute("content", PRODUCT.description);
 
     // Render product datas in HTML
-    ShowProduct(result);
+    ShowProduct(PRODUCT);
+
+    // Listen when submit Add to cart
+    document.getElementById("add-to-cart-form").addEventListener("click", (event) => {
+        AddToCart(event, PRODUCT);
+    });
 });
 
 async function GetProduct(_category, _id) {
@@ -78,4 +83,24 @@ function ShowOptions(_options) {
         opt.innerHTML = element;
         selectOption.appendChild(opt);
     });
+}
+
+function AddToCart(event, _product) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let product = {
+        id: _product._id,
+        name: _product.name,
+        description: _product.description,
+        imageUrl: _product.imageUrl,
+        price: _product.price,
+        option: document.getElementById("options").value,
+        qty: document.getElementById("quantity").value
+    };
+
+    localStorage.setItem("cart_" + _product.type, JSON.stringify(product));
+    console.log(JSON.parse(localStorage.getItem("cart_" + _product.type)));
+
+    window.location.href = "/pages/cart.html";
 }
