@@ -114,7 +114,7 @@ function AddToCart(event, _product) {
     event.preventDefault();
     event.stopPropagation();
 
-    let option_key = GetOptionKey(_product.type);
+    let option_key = GetOptionKey(_product);
 
     let product = {
         id: _product._id,
