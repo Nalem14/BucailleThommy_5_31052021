@@ -35,38 +35,30 @@
     <main>
       <div id="product-item">
         <article>
-          <h2>Produit Nom</h2>
+          <h2 id="product-name">Produit Nom</h2>
 
           <figure>
-            <img src="https://via.placeholder.com/400" alt="" />
+            <img id="product-img" src="https://via.placeholder.com/400" alt="" />
           </figure>
 
           <div>
-            <p>
+            <p id="product-description">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti
               fugiat neque aliquam voluptatem sunt. Consectetur facilis nobis
               numquam dignissimos explicabo rem exercitationem tempore, dolores
               dolorum repellendus adipisci! Tempore, omnis suscipit.
             </p>
 
-            <span>Prix: 500€</span>
+            <span id="product-price">Prix: 500€</span>
 
-            <form action="./cart.html" method="post">
+            <form action="./cart.html" method="post" id="add-to-cart-form">
               <div>
-                <label for="color">Couleur</label>
-                <select name="color" id="color">
-                  <option value="0">Noir</option>
-                  <option value="1" selected="selected">Marron</option>
-                  <option value="2">Bleu</option>
-                  <option value="3">Vert</option>
-                  <option value="4">Rouge</option>
-                </select>
+                <label for="options" id="options-name">OptionName</label>
+                <select name="options" id="options"></select>
               </div>
               <div>
                 <label for="quantity">Quantité</label>
-                <select name="quantity" id="quantity">
-                  <option value="1">1</option>
-                </select>
+                <select name="quantity" id="quantity"></select>
               </div>
               <button type="submit" class="btn">Ajouter au panier</button>
             </form>

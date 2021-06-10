@@ -27,7 +27,7 @@ function LoadProducts(category) {
             content += `
 
                 <article>
-                    <a href="./pages/product.html?id=`+ element._id +`">
+                    <a href="./pages/product.html?id=`+ element._id +`&category=`+ category +`">
                         <figure>
                             <img src="`+ element.imageUrl +`" alt="`+ element.description +`" />
                         </figure>
@@ -35,7 +35,7 @@ function LoadProducts(category) {
                         <p>`+ element.description +`t</p>
                         <span>`+ element.price +`€</span>
                     </a>
-                    <a href="./pages/product.html?id=`+ element._id +`" class="btn">Voir le produit</a>
+                    <a href="./pages/product.html?id=`+ element._id +`&category=`+ category +`" class="btn">Voir le produit</a>
                 </article>
             `;
         });
