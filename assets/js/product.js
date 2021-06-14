@@ -24,7 +24,7 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     document.querySelector('meta[name="description"]').setAttribute("content", product.description);
 
     // Render product datas in HTML
-    showProduct(product);
+    renderProduct(product);
 
     // Listen when submit Add to cart
     document.getElementById("add-to-cart-form").addEventListener("submit", (event) => {
@@ -46,19 +46,24 @@ async function getProduct(_category, _id) {
     });
 }
 
-function showProduct(_product) {
+function renderProduct(_product) {
     // Set datas in view
 
     document.getElementById("product-name").innerHTML = _product.name;
     document.getElementById("product-img").src = _product.imageUrl;
     document.getElementById("product-description").innerHTML = _product.description;
-    document.getElementById("product-price").innerHTML = _product.price + "€";
+    document.getElementById("product-price").innerHTML = toEuro(_product.price);
 
     // Check for specifics options in select and get the correct array
     // to render it
     let key = getOptionKey(_product);
     showOptions(_product[key]);
     document.getElementById("options-name").innerHTML = getOptionName(key);
+}
+
+function toEuro(number) {
+    number = number/100;
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(number);
 }
 
 function getOptionKey(product) {
