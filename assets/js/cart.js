@@ -2,14 +2,14 @@
 let CART_TEDDIES, CART_FURNITURE, CART_CAMERAS, CART;
 window.addEventListener("DOMContentLoaded", (event) => {
 
-    GetCarts().then((result) => {
-        RenderCart();
+    getCarts().then((result) => {
+        renderCart();
     }).catch((error) => {
         document.getElementById("cart-container").innerHTML("Erreur. Impossible de charger le panier : " + error);
     });
 });
 
-function GetCarts(type = null) {
+function getCarts(type = null) {
     return new Promise((resolve, reject) => {
         try {
 
@@ -32,7 +32,7 @@ function GetCarts(type = null) {
     });
 }
 
-function RenderCart() {
+function renderCart() {
     // Get container and cart total price element
     let container = document.getElementById("cart-container");
     let content = "", n = 0;
@@ -62,11 +62,11 @@ function RenderCart() {
                 <form action="./cart.html" method="post">
                 <label for="quantity-${n}">Quantité</label>
                 <select name="quantity" id="quantity-${n}">
-                    ${RenderQty(element.qty)}
+                    ${renderQty(element.qty)}
                 </select>
                 </form>
 
-                <span>${ToEuro(element.price * element.qty)}</span>
+                <span>${toEuro(element.price * element.qty)}</span>
                 <a href="#"><i class="fas fa-trash"></i></a>
             </article>
         `;
@@ -77,55 +77,62 @@ function RenderCart() {
 
     // Set listeners
     document.querySelectorAll("#cart-container article").forEach(element => {
-
         // Delete button
-        element.querySelector("a").addEventListener("click", (event) => {
-            DeleteProduct(element.getAttribute("data-id").toString(), element.getAttribute("data-type").toString());
-        });
+        onDeleteProduct(element);
 
         // Change quantity
-        element.querySelector("form").addEventListener("change", (event) => {
-            let key = element.getAttribute("data-key");
-            let type = element.getAttribute("data-type");
-            let id = element.getAttribute("data-id");
-            let newQty = document.getElementById("quantity-" + key).value;
-
-            GetCarts(type).then(result => {
-                for(var i = 0; i < result.length; i++) {
-                    let product = result[i];
-
-                    if(product == null || typeof(product) == undefined)
-                        continue;
-
-                    if(product.id == id) {
-                        result[i].qty = newQty;
-                        SaveCart(result);
-                        GetCarts();
-                        break;
-                    }
-                }
-            });
-        });
+        onChangeQuantity(element);
     });
 
-    RenderTotalPrice();
+    renderTotalPrice();
 }
 
-function ToEuro(number) {
+function onDeleteProduct(element) {
+    element.querySelector("a").addEventListener("click", (event) => {
+        deleteProduct(element.getAttribute("data-id").toString(), element.getAttribute("data-type").toString());
+    });
+}
+
+function onChangeQuantity(element) {
+    element.querySelector("form").addEventListener("change", (event) => {
+        let key = element.getAttribute("data-key");
+        let type = element.getAttribute("data-type");
+        let id = element.getAttribute("data-id");
+        let newQty = document.getElementById("quantity-" + key).value;
+
+        getCarts(type).then(result => {
+            for(var i = 0; i < result.length; i++) {
+                let product = result[i];
+
+                if(product == null || typeof(product) == undefined)
+                    continue;
+
+                if(product.id == id) {
+                    result[i].qty = newQty;
+                    saveCart(result);
+                    getCarts();
+                    break;
+                }
+            }
+        });
+    });
+}
+
+function toEuro(number) {
     number = number/100;
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(number);
 }
 
-function RenderTotalPrice() {
+function renderTotalPrice() {
     let total = 0;
     document.querySelectorAll("#cart-container article").forEach(element => {
         total += element.getAttribute("data-price");
     });
 
-    document.getElementById("cart-total").innerHTML = "Total: " + ToEuro(total);
+    document.getElementById("cart-total").innerHTML = "Total: " + toEuro(total);
 }
 
-function RenderQty(selected) {
+function renderQty(selected) {
     let qty = "";
 
     for(var i = 0; i < 10; i++) {
@@ -139,9 +146,9 @@ function RenderQty(selected) {
     return qty;
 }
 
-function DeleteProduct(id, type) {
+function deleteProduct(id, type) {
     // Get the cart for its type
-    GetCarts(type).then(products => {
+    getCarts(type).then(products => {
         let found = false;
 
         // Foreach elements of tha cart to find desired ID
@@ -163,18 +170,18 @@ function DeleteProduct(id, type) {
 
         if(found) {
             // Save new array and delete HTML element for the product
-            SaveCart(products, type);
+            saveCart(products, type);
             document.getElementById("product-" + id).remove();
 
             // Reload carts variables
-            GetCarts().then(result => {
-                RenderTotalPrice();
+            getCarts().then(result => {
+                renderTotalPrice();
                 document.getElementById("cart-count").innerHTML = CART.length;
             });
         }
     });
 }
 
-function SaveCart(cart, type) {
+function saveCart(cart, type) {
     localStorage.setItem("cart_" + type, JSON.stringify(cart));
 }

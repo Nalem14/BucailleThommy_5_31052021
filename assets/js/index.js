@@ -1,8 +1,8 @@
 window.addEventListener("DOMContentLoaded", (event) => {
-    CartCount();
+    cartCount();
 });
 
-function CartCount() {
+function cartCount() {
     const CART_TEDDIES = JSON.parse(localStorage.getItem("cart_teddies")) || [];
     const CART_FURNITURE = JSON.parse(localStorage.getItem("cart_furniture")) || [];
     const CART_CAMERAS = JSON.parse(localStorage.getItem("cart_cameras")) || [];

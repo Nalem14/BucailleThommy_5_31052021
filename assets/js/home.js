@@ -1,16 +1,16 @@
 window.addEventListener("DOMContentLoaded", (event) => {
-    LoadProducts("teddies");
+    loadProducts("teddies");
 
     document.getElementById("teddies").addEventListener("click", () => {
-        LoadProducts("teddies");
+        loadProducts("teddies");
     })
 
     document.getElementById("cameras").addEventListener("click", () => {
-        LoadProducts("cameras");
+        loadProducts("cameras");
     })
 
     document.getElementById("furnitures").addEventListener("click", () => {
-        LoadProducts("furniture");
+        loadProducts("furniture");
     })
 });
 
@@ -19,7 +19,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 // Need to refactore, render HTML in another function
 //
 //
-function LoadProducts(category) {
+function loadProducts(category) {
     let container = document.getElementById("products-container");
     container.innerHTML = "Chargement...";
 

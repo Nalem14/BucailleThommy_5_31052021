@@ -13,26 +13,26 @@ window.addEventListener("DOMContentLoaded", async (event) => {
 
     // Get URL params
     const url = new URL(window.location.href);
-    const ID = url.searchParams.get("id");
-    const CATEGORY = url.searchParams.get("category");
+    const id = url.searchParams.get("id");
+    const category = url.searchParams.get("category");
 
     // Get product from params
-    const PRODUCT = await GetProduct(CATEGORY, ID);
+    const product = await getProduct(category, id);
 
     // Set window title and meta description
-    document.title = PRODUCT.name + " - Orinoco";
-    document.querySelector('meta[name="description"]').setAttribute("content", PRODUCT.description);
+    document.title = product.name + " - Orinoco";
+    document.querySelector('meta[name="description"]').setAttribute("content", product.description);
 
     // Render product datas in HTML
-    ShowProduct(PRODUCT);
+    showProduct(product);
 
     // Listen when submit Add to cart
     document.getElementById("add-to-cart-form").addEventListener("submit", (event) => {
-        AddToCart(event, PRODUCT, CATEGORY);
+        addToCart(event, product, category);
     });
 });
 
-async function GetProduct(_category, _id) {
+async function getProduct(_category, _id) {
 
     return fetch('http://localhost:3000/api/' + _category + '/' + _id)
     .then(response => response.json())
@@ -46,7 +46,7 @@ async function GetProduct(_category, _id) {
     });
 }
 
-function ShowProduct(_product) {
+function showProduct(_product) {
     // Set datas in view
 
     document.getElementById("product-name").innerHTML = _product.name;
@@ -56,12 +56,12 @@ function ShowProduct(_product) {
 
     // Check for specifics options in select and get the correct array
     // to render it
-    let key = GetOptionKey(_product);
-    ShowOptions(_product[key]);
-    document.getElementById("options-name").innerHTML = GetOptionName(key);
+    let key = getOptionKey(_product);
+    showOptions(_product[key]);
+    document.getElementById("options-name").innerHTML = getOptionName(key);
 }
 
-function GetOptionKey(product) {
+function getOptionKey(product) {
     if("colors" in product)
         return "colors";
 
@@ -74,7 +74,7 @@ function GetOptionKey(product) {
     return "Unknown";
 }
 
-function GetOptionName(key) {
+function getOptionName(key) {
     let name = "";
     switch (key) {
         case "colors":
@@ -97,7 +97,7 @@ function GetOptionName(key) {
     return name;
 }
 
-function ShowOptions(_options) {
+function showOptions(_options) {
     const selectOption = document.getElementById("options");
 
     // For each options, add it to the 'options' select
@@ -110,11 +110,11 @@ function ShowOptions(_options) {
     });
 }
 
-function AddToCart(event, _product, _type) {
+function addToCart(event, _product, _type) {
     event.preventDefault();
     event.stopPropagation();
 
-    let option_key = GetOptionKey(_product);
+    let option_key = getOptionKey(_product);
     let cart = JSON.parse(localStorage.getItem("cart_" + _type)) || [];
     let product = {
         id: _product._id,
@@ -123,7 +123,7 @@ function AddToCart(event, _product, _type) {
         description: _product.description,
         imageUrl: _product.imageUrl,
         price: _product.price,
-        optionName: GetOptionName(option_key),
+        optionName: getOptionName(option_key),
         optionValue: document.getElementById("options").value,
         qty: document.getElementById("quantity").value
     };
