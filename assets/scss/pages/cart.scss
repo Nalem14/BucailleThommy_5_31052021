@@ -19,6 +19,12 @@ main {
             margin-top: 40px;
         }
 
+        div > p {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.2em;
+        }
+
 
         h2 {
             font-size: 1.3em;
@@ -74,6 +80,14 @@ main {
             p {
                 color: rgb(158, 157, 157);
                 margin-right: 15px;
+
+                strong {
+                    color: #000;
+                    &::before {
+                        content: "\a";
+                        white-space: pre;
+                    }
+                }
             }
 
             label {
