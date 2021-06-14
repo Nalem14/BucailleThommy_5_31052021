@@ -14,6 +14,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
     })
 });
 
+//
+//
+// Need to refactore, render HTML in another function
+//
+//
 function LoadProducts(category) {
     let container = document.getElementById("products-container");
     container.innerHTML = "Chargement...";

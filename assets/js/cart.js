@@ -47,28 +47,28 @@ function RenderCart() {
         // Add HTML element in var
         content += `
             <article id="product-${element.id}" data-key="${n}" data-id="${element.id}" data-type="${element.type}" data-price="${element.price * element.qty}">
-            <figure>
-            <img src="${element.imageUrl}" alt="" />
-            </figure>
+                <figure>
+                <img src="${element.imageUrl}" alt="" />
+                </figure>
 
-            <div>
-            <h3>${element.name}</h3>
-            <p>
-                ${element.description}
-                <strong>${element.optionName}: ${element.optionValue}</strong>
-            </p>
-            </div>
+                <div>
+                <h3>${element.name}</h3>
+                <p>
+                    ${element.description}
+                    <strong>${element.optionName}: ${element.optionValue}</strong>
+                </p>
+                </div>
 
-            <form action="./cart.html" method="post">
-            <label for="quantity-${n}">Quantité</label>
-            <select name="quantity" id="quantity-${n}">
-                ${RenderQty(element.qty)}
-            </select>
-            </form>
+                <form action="./cart.html" method="post">
+                <label for="quantity-${n}">Quantité</label>
+                <select name="quantity" id="quantity-${n}">
+                    ${RenderQty(element.qty)}
+                </select>
+                </form>
 
-            <span>${ToEuro(element.price * element.qty)}</span>
-            <a href="#"><i class="fas fa-trash"></i></a>
-        </article>
+                <span>${ToEuro(element.price * element.qty)}</span>
+                <a href="#"><i class="fas fa-trash"></i></a>
+            </article>
         `;
     });
 
@@ -112,6 +112,7 @@ function RenderCart() {
 }
 
 function ToEuro(number) {
+    number = number/100;
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(number);
 }
 
