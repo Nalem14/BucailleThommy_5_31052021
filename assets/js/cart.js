@@ -66,15 +66,20 @@ function renderCart() {
                 </select>
                 </form>
 
-                <span>${toEuro(element.price * element.qty)}</span>
+                <span id="price-${n}">${toEuro(element.price * element.qty)}</span>
                 <a href="#"><i class="fas fa-trash"></i></a>
             </article>
         `;
+        n++;
     });
 
     // Set HTML content
     container.innerHTML = content;
+    setProductsListeners();
+    renderTotalPrice();
+}
 
+function setProductsListeners() {
     // Set listeners
     document.querySelectorAll("#cart-container article").forEach(element => {
         // Delete button
@@ -83,8 +88,6 @@ function renderCart() {
         // Change quantity
         onChangeQuantity(element);
     });
-
-    renderTotalPrice();
 }
 
 function onDeleteProduct(element) {
@@ -109,8 +112,11 @@ function onChangeQuantity(element) {
 
                 if(product.id == id) {
                     result[i].qty = newQty;
-                    saveCart(result);
-                    getCarts();
+                    element.setAttribute("data-price", product.price * newQty);
+                    saveCart(result, type);
+                    getCarts().then(result => {
+                        renderTotalPrice();
+                    });
                     break;
                 }
             }
@@ -126,7 +132,8 @@ function toEuro(number) {
 function renderTotalPrice() {
     let total = 0;
     document.querySelectorAll("#cart-container article").forEach(element => {
-        total += element.getAttribute("data-price");
+        total += parseInt(element.getAttribute("data-price"));
+        document.getElementById("price-" + element.getAttribute("data-key")).innerHTML = toEuro(element.getAttribute("data-price"));
     });
 
     document.getElementById("cart-total").innerHTML = "Total: " + toEuro(total);
