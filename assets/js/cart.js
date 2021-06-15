@@ -119,10 +119,12 @@ function renderCart() {
 
     if(CART.length <= 0) {
         container.innerHTML = "<p>Votre panier est vide.</p>";
+        document.getElementById("confirm-cart").style.display = "none";
         return;
     }
 
     container.innerHTML = "Chargement...";
+    document.getElementById("confirm-cart").style.display = "flex";
     CART.forEach(element => {
         // Add HTML element in var
         content += `
