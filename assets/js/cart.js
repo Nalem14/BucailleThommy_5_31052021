@@ -68,9 +68,25 @@ function handleCartSubmit(event) {
                 return response.json();
             }).then(function(data) {
                 console.log(data);
+                localStorage.setItem("order-confirmation-" + category, data.orderId);
             });
         })
     });
+
+    // Clear carts
+    clearCarts();
+
+    // Redirect to confirmation page
+    window.location.href = "/pages/order-confirmation.html";
+}
+
+function clearCarts() {
+    localStorage.clear();
+    document.querySelectorAll("artilcle").forEach(element => {
+        element.remove();
+    });
+
+    document.getElementById("cart-container").innerHTML = "<p>Votre panier est vide.</p>";
 }
 
 function getCarts(type = null) {
