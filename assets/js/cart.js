@@ -2,12 +2,76 @@
 let CART_TEDDIES, CART_FURNITURE, CART_CAMERAS, CART;
 window.addEventListener("DOMContentLoaded", (event) => {
 
+    // Initialize carts variables and render view
     getCarts().then((result) => {
         renderCart();
     }).catch((error) => {
         document.getElementById("cart-container").innerHTML("Erreur. Impossible de charger le panier : " + error);
     });
+
+    // When confirm cart, show contact form and focus first input
+    document.getElementById("confirm-cart").addEventListener("click", (event) => {
+        confirmCart(event);
+    });
+
+    // When validate contact form, submit cart
+    document.getElementById("contact-form").addEventListener("submit", (event) => {
+        handleCartSubmit(event);
+    });
 });
+
+function confirmCart(event) {
+    // Show contact form
+    document.getElementById("user-info").style.display = "initial";
+
+    // Hide confirm cart button
+    event.target.style.display = "none";
+
+    // Focus first input
+    document.querySelector("input[name=firstName]").select();
+
+    // Scroll to section
+    document.getElementById("user-info").scrollIntoView();
+}
+
+function handleCartSubmit(event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    let firstName = document.getElementById("firstName").value;
+    let lastName = document.getElementById("lastName").value;
+    let email = document.getElementById("email").value;
+    let city = document.getElementById("city").value;
+    let address = document.getElementById("address").value;
+
+    let contact = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        city: city,
+        address: address
+    }
+
+    let categories = ["teddies", "cameras", "furniture"];
+    categories.forEach(category => {
+
+        getCarts(category).then(products => {
+
+            fetch('http://localhost:3000/api/' + category + "/order", {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: 'post',
+                body: JSON.stringify({contact: contact, products: products})
+            }).then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                console.log(data);
+            });
+        })
+    });
+}
 
 function getCarts(type = null) {
     return new Promise((resolve, reject) => {

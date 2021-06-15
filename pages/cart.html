@@ -41,7 +41,41 @@
         </div>
 
         <span id="cart-total">Total: 0€</span>
-        <a href="./order-confirmation.html" class="btn">Passer ma commande</a>
+        <a href="#!" class="btn" id="confirm-cart">Passer ma commande</a>
+      </section>
+
+      <section id="user-info">
+        <h2>Informations de livraison</h2>
+        <form action="./order-confirmation.html" method="post" id="contact-form">
+          <div>
+            <label for="firstName">Nom</label>
+            <input type="text" name="firstName" id="firstName">
+          </div>
+
+          <div>
+            <label for="lastName">Prénom</label>
+            <input type="text" name="lastName" id="lastName">
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">
+          </div>
+
+          <div>
+            <label for="city">Ville</label>
+            <input type="text" name="city" id="city">
+          </div>
+
+          <div>
+            <label for="address">Adresse</label>
+            <input type="text" name="address" id="address">
+          </div>
+
+          <div>
+            <button type="submit" class="btn">Valider ma commande</button>
+          </div>
+        </form>
       </section>
     </main>
 

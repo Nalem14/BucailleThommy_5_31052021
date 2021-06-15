@@ -4,15 +4,27 @@ main {
     max-width: 1200px;
     margin: 0 auto;
 
-    #cart {
+    #cart, #user-info {
         background-color: #f7f7f7;
         display: flex;
         flex-direction: column;
+        margin: 10px;
+
+        h2 {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-left: 20px;
+            margin-top: 20px;
+            flex-basis: 100%;
+        }
+    }
+
+    #cart {
         border-radius: 10px;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-        margin: 10px;
         margin-top: 40px;
+        margin-bottom: 0;
 
         @media screen AND (min-width: 1200px) {
             margin: 0;
@@ -23,15 +35,6 @@ main {
             text-align: center;
             margin-top: 30px;
             font-size: 1.2em;
-        }
-
-
-        h2 {
-            font-size: 1.3em;
-            font-weight: 700;
-            margin-left: 20px;
-            margin-top: 20px;
-            flex-basis: 100%;
         }
 
         // Total price
@@ -126,6 +129,59 @@ main {
             a {
                 color: darken($color-primary, 10);
                 margin: 15px 15px;
+            }
+        }
+    }
+
+    #user-info {
+        margin-top: 0;
+        display: none;
+
+        @media screen AND (min-width: 1200px) {
+            margin: 0;
+        }
+
+        > form {
+            margin: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+
+            @media screen AND (min-width: 640px) {
+                flex-direction: row;
+            }
+
+            > div {
+                margin-top: 10px;
+
+                @media screen AND (min-width: 640px) {
+                    flex-basis: 50%;
+                }
+
+                label {
+                    margin-left: 10px;
+                    font-weight: 700;
+                }
+    
+                input {
+                    min-width: 0;
+                    width: 100%;
+                    height: 48px;
+                    font-size: 1em;
+                    text-indent: 10px;
+    
+                    &:focus {
+                        border: none;
+                    }
+                }
+            }
+
+            > div:last-child {
+                margin-top: 30px;
+                .btn {
+                    width: 95%;
+                    margin: 0 auto;
+                }
             }
         }
     }

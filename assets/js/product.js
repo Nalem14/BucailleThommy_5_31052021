@@ -139,6 +139,7 @@ function addToCart(event, _product, _type) {
     // Else, add product to the cart
     if(product == null) {
         product = {
+            _id: _product._id,
             id: _product._id + "-" + optionValue.replace(" ", ""),
             name: _product.name,
             type: _type,
