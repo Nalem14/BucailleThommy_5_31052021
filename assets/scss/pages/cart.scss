@@ -173,6 +173,26 @@ main {
                     &:focus {
                         border: none;
                     }
+
+                    &.error {
+                        border: 2px solid rgb(184, 53, 53);
+                    }
+
+                    &.success {
+                        border: 2px solid rgb(45, 131, 45);
+                    }
+                }
+
+                p {
+                    text-align: center;
+                    margin-top: 10px;
+
+                    &.error {
+                        color: rgb(184, 53, 53);
+                    }
+                }
+                .hidden {
+                    display: none;
                 }
             }
 
