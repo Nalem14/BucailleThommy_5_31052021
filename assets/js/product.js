@@ -131,7 +131,10 @@ function addToCart(event, _product, _type) {
     cart.forEach(element => {
         if(element.id == _product._id + "-" + optionValue.replace(" ", "")) {
             product = true;
+            console.log(element.qty);
             element.qty += quantity;
+            console.log(element.qty);
+            console.log(quantity);
             return;
         }
     });
@@ -145,10 +148,10 @@ function addToCart(event, _product, _type) {
             type: _type,
             description: _product.description,
             imageUrl: _product.imageUrl,
-            price: _product.price,
+            price: parseFloat(_product.price),
             optionName: getOptionName(optionKey),
             optionValue: optionValue,
-            qty: quantity
+            qty: parseInt(quantity)
         };
         cart.push(product);
     }
