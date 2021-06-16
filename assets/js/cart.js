@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 function confirmCart(event) {
     // Show contact form
-    document.getElementById("user-info").style.display = "initial";
+    document.getElementById("user-info").style.display = "flex";
 
     // Hide confirm cart button
     event.target.style.display = "none";
@@ -57,18 +57,25 @@ function handleCartSubmit(event) {
 
         getCarts(category).then(products => {
 
+            let productsId = [];
+            products.forEach(product => {
+                productsId.push(product._id);
+            })
+            console.log({contact: contact, products: productsId});
+
             fetch('http://localhost:3000/api/' + category + "/order", {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
                 method: 'post',
-                body: JSON.stringify({contact: contact, products: products})
+                body: JSON.stringify({contact: contact, products: productsId})
             }).then(function(response) {
                 return response.json();
             }).then(function(data) {
                 console.log(data);
-                localStorage.setItem("order-confirmation-" + category, data.orderId);
+                localStorage.setItem("order-id-confirmation-" + category, data.orderId);
+                localStorage.setItem("order-price-confirmation-" + category, data.orderId);
             });
         })
     });
@@ -77,7 +84,7 @@ function handleCartSubmit(event) {
     clearCarts();
 
     // Redirect to confirmation page
-    window.location.href = "/pages/order-confirmation.html";
+    //window.location.href = "/pages/order-confirmation.html";
 }
 
 function clearCarts() {
