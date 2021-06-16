@@ -29,10 +29,6 @@ function GetOrderData() {
             })
 
             totalPrice = parseFloat(localStorage.getItem("order-price-confirmation"));
-            if(typeof(totalPrice) == "undefined") {
-                reject();
-                return;
-            } 
 
             return resolve({
                 orderIds: orderIds,
