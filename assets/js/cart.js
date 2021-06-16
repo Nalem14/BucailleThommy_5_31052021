@@ -58,10 +58,12 @@ function handleCartSubmit(event) {
         getCarts(category).then(products => {
 
             let productsId = [];
+            let totalPrice = 0;
             products.forEach(product => {
+                totalPrice += product.price * product.qty;
                 productsId.push(product._id);
             })
-            console.log({contact: contact, products: productsId});
+            // console.log({contact: contact, products: productsId});
 
             fetch('http://localhost:3000/api/' + category + "/order", {
                 headers: {
@@ -73,9 +75,9 @@ function handleCartSubmit(event) {
             }).then(function(response) {
                 return response.json();
             }).then(function(data) {
-                console.log(data);
+                // console.log(data);
                 localStorage.setItem("order-id-confirmation-" + category, data.orderId);
-                localStorage.setItem("order-price-confirmation-" + category, data.orderId);
+                localStorage.setItem("order-price-confirmation-" + category, totalPrice);
             });
         })
     });

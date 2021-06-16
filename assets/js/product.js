@@ -37,11 +37,11 @@ async function getProduct(_category, _id) {
     return fetch('http://localhost:3000/api/' + _category + '/' + _id)
     .then(response => response.json())
     .then(datas => {
-        console.log(datas);
+        // console.log(datas);
         return datas;
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         return error;
     });
 }
@@ -107,7 +107,7 @@ function showOptions(_options) {
 
     // For each options, add it to the 'options' select
     _options.forEach(element => {
-        console.log(element);
+        // console.log(element);
         var opt = document.createElement('option');
         opt.value = element;
         opt.innerHTML = element;
@@ -131,10 +131,7 @@ function addToCart(event, _product, _type) {
     cart.forEach(element => {
         if(element.id == _product._id + "-" + optionValue.replace(" ", "")) {
             product = true;
-            console.log(element.qty);
             element.qty += quantity;
-            console.log(element.qty);
-            console.log(quantity);
             return;
         }
     });
