@@ -1,5 +1,7 @@
 
 let CART_TEDDIES, CART_FURNITURE, CART_CAMERAS, CART;
+let categories = ["teddies", "cameras", "furniture"];
+
 window.addEventListener("DOMContentLoaded", (event) => {
 
     // Initialize carts variables and render view
@@ -52,41 +54,58 @@ function handleCartSubmit(event) {
         address: address
     }
 
-    let categories = ["teddies", "cameras", "furniture"];
-    categories.forEach(category => {
+    let orderIds = {}, totalPrice = 0;
+    let promise = new Promise((resolve) => {
+        categories.forEach((category, index) => {
 
-        getCarts(category).then(products => {
+            getCarts(category).then(products => {
 
-            let productsId = [];
-            let totalPrice = 0;
-            products.forEach(product => {
-                totalPrice += product.price * product.qty;
-                productsId.push(product._id);
+                let productsId = [];
+                products.forEach(product => {
+                    totalPrice += product.price * product.qty;
+                    productsId.push(product._id);
+                })
+
+                fetch('http://localhost:3000/api/' + category + "/order", {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'post',
+                    body: JSON.stringify({contact: contact, products: productsId})
+                }).then(function(response) {
+                    return response.json();
+                }).then(function(data) {
+                    // console.log(data);
+                    orderIds[category] = data.orderId;
+                    if(index == categories.length-1)
+                        resolve();
+                });
             })
-            // console.log({contact: contact, products: productsId});
-
-            fetch('http://localhost:3000/api/' + category + "/order", {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: 'post',
-                body: JSON.stringify({contact: contact, products: productsId})
-            }).then(function(response) {
-                return response.json();
-            }).then(function(data) {
-                // console.log(data);
-                localStorage.setItem("order-id-confirmation-" + category, data.orderId);
-                localStorage.setItem("order-price-confirmation-" + category, totalPrice);
-            });
-        })
+        });
     });
 
-    // Clear carts
-    clearCarts();
+    promise.then(() => {
+        // Clear carts
+        clearCarts();
 
-    // Redirect to confirmation page
-    window.location.href = "/pages/order-confirmation.html";
+        // Save order datas
+        saveOrderDatas(orderIds, totalPrice);
+
+        // Redirect to confirmation page
+        window.location.href = "/pages/order-confirmation.html";
+    });
+}
+
+function saveOrderDatas(orderIds, price) {
+    categories.forEach(category => {
+        localStorage.removeItem("order-id-confirmation-" + category);
+        if(typeof(orderIds[category]) != "undefined")
+            localStorage.setItem("order-id-confirmation-" + category, orderIds[category]);
+    })
+
+    localStorage.removeItem("order-price-confirmation");
+    localStorage.setItem("order-price-confirmation", price);
 }
 
 function clearCarts() {
