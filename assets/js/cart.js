@@ -14,11 +14,17 @@ window.addEventListener("DOMContentLoaded", (event) => {
     // When confirm cart, show contact form and focus first input
     document.getElementById("confirm-cart").addEventListener("click", (event) => {
         confirmCart(event);
+        setContactListener();
     });
 
     // When validate contact form, submit cart
     document.getElementById("contact-form").addEventListener("submit", (event) => {
-        handleCartSubmit(event);
+        event.stopPropagation();
+        event.preventDefault();
+
+        checkCanSubmit().then(() => {
+            handleCartSubmit(event);
+        });
     });
 });
 
@@ -37,9 +43,6 @@ function confirmCart(event) {
 }
 
 function handleCartSubmit(event) {
-    event.stopPropagation();
-    event.preventDefault();
-
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let email = document.getElementById("email").value;
@@ -301,4 +304,81 @@ function deleteProduct(id, type) {
 
 function saveCart(cart, type) {
     localStorage.setItem("cart_" + type, JSON.stringify(cart));
+}
+
+
+/**
+ * Validations
+ **/
+function setContactListener() {
+    document.querySelectorAll("#contact-form input").forEach(input => {
+        input.addEventListener("keyup", (event) => {
+            setInputValid(checkInput(input), input);
+        });
+    });
+}
+function checkCanSubmit() {
+    let can = true;
+
+    return new Promise((resolve, reject) => {
+        let inputs = document.querySelectorAll("#contact-form input");
+        for(var i = 0; i < inputs.length; i++) {
+            let input = inputs[i];
+            let valid = checkInput(input);
+            setInputValid(valid, input);
+
+            if(!valid) {
+                reject();
+                break;
+            }
+
+            if(i == inputs.length-1)
+                resolve();
+        }
+    });
+}
+function setInputValid(valid, input) {
+    if(!valid) {
+        input.classList.add("error");
+        input.classList.remove("success");
+        input.nextElementSibling?.classList.remove("hidden");
+    }else{
+        input.classList.add("success");
+        input.classList.remove("error");
+        input.nextElementSibling?.classList.add("hidden");
+    }
+}
+function checkInput(input) {
+
+    let validation = false;
+    switch(input.name) {
+        case "firstName":
+        case "lastName":
+            validation = validateName(input.value);
+        break;
+
+        case "email":
+            validation = validateEmail(input.value);
+        break;
+
+        case "address":
+        case "city":
+            validation = validateCityOrAddress(input.value);
+        break;
+    }
+
+    return validation;
+}
+
+function validateCityOrAddress(value) {
+    return !/[^a-zA-Z0-9 ]/.test(value) && value.trim().length > 3 && value.trim().length < 60;
+}
+
+function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function validateName(name) {
+    return !/[^a-zA-Z0-9éèÉÈêÊëË ]/.test(name) && name.trim().length >= 3 && name.trim().length < 25;
 }
