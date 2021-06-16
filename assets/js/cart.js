@@ -196,7 +196,7 @@ function onChangeQuantity(element) {
             for(var i = 0; i < result.length; i++) {
                 let product = result[i];
 
-                if(product == null || typeof(product) == undefined)
+                if(product == null || typeof(product) == "undefined")
                     continue;
 
                 if(product.id == id) {
@@ -252,7 +252,7 @@ function deleteProduct(id, type) {
             let product = products[i];
 
             // If element is null or undefined, go to the next
-            if(product == null || typeof(product) == undefined)
+            if(product == null || typeof(product) == "undefined")
                 continue;
                 
             // If its the desired element, remove from the array
