@@ -86,7 +86,7 @@ function handleCartSubmit(event) {
     clearCarts();
 
     // Redirect to confirmation page
-    //window.location.href = "/pages/order-confirmation.html";
+    window.location.href = "/pages/order-confirmation.html";
 }
 
 function clearCarts() {
