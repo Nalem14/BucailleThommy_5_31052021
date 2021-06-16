@@ -13,55 +13,60 @@ window.addEventListener("DOMContentLoaded", async (event) => {
 
     // Get URL params
     const url = new URL(window.location.href);
-    const ID = url.searchParams.get("id");
-    const CATEGORY = url.searchParams.get("category");
+    const id = url.searchParams.get("id");
+    const category = url.searchParams.get("category");
 
     // Get product from params
-    const PRODUCT = await GetProduct(CATEGORY, ID);
+    const product = await getProduct(category, id);
 
     // Set window title and meta description
-    document.title = PRODUCT.name + " - Orinoco";
-    document.querySelector('meta[name="description"]').setAttribute("content", PRODUCT.description);
+    document.title = product.name + " - Orinoco";
+    document.querySelector('meta[name="description"]').setAttribute("content", product.description);
 
     // Render product datas in HTML
-    ShowProduct(PRODUCT);
+    renderProduct(product);
 
     // Listen when submit Add to cart
     document.getElementById("add-to-cart-form").addEventListener("submit", (event) => {
-        AddToCart(event, PRODUCT);
+        addToCart(event, product, category);
     });
 });
 
-async function GetProduct(_category, _id) {
+async function getProduct(_category, _id) {
 
     return fetch('http://localhost:3000/api/' + _category + '/' + _id)
     .then(response => response.json())
     .then(datas => {
-        console.log(datas);
+        // console.log(datas);
         return datas;
     })
     .catch(error => {
-        console.log(error);
+        // console.log(error);
         return error;
     });
 }
 
-function ShowProduct(_product) {
+function renderProduct(_product) {
     // Set datas in view
 
     document.getElementById("product-name").innerHTML = _product.name;
     document.getElementById("product-img").src = _product.imageUrl;
     document.getElementById("product-description").innerHTML = _product.description;
-    document.getElementById("product-price").innerHTML = _product.price + "€";
+    document.getElementById("product-price").innerHTML = toEuro(_product.price);
 
     // Check for specifics options in select and get the correct array
     // to render it
-    let key = GetOptionKey(_product);
-    ShowOptions(_product[key]);
-    document.getElementById("options-name").innerHTML = GetOptionName(key);
+    let key = getOptionKey(_product);
+    showOptions(_product[key]);
+    document.getElementById("options-name").innerHTML = getOptionName(key);
 }
 
-function GetOptionKey(product) {
+function toEuro(number) {
+    number = number/100;
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(number);
+}
+
+function getOptionKey(product) {
     if("colors" in product)
         return "colors";
 
@@ -74,7 +79,7 @@ function GetOptionKey(product) {
     return "Unknown";
 }
 
-function GetOptionName(key) {
+function getOptionName(key) {
     let name = "";
     switch (key) {
         case "colors":
@@ -97,12 +102,12 @@ function GetOptionName(key) {
     return name;
 }
 
-function ShowOptions(_options) {
+function showOptions(_options) {
     const selectOption = document.getElementById("options");
 
     // For each options, add it to the 'options' select
     _options.forEach(element => {
-        console.log(element);
+        // console.log(element);
         var opt = document.createElement('option');
         opt.value = element;
         opt.innerHTML = element;
@@ -110,26 +115,46 @@ function ShowOptions(_options) {
     });
 }
 
-function AddToCart(event, _product) {
+function addToCart(event, _product, _type) {
     event.preventDefault();
     event.stopPropagation();
 
-    let option_key = GetOptionKey(_product);
+    let optionKey = getOptionKey(_product);
+    let optionValue = document.getElementById("options").value;
+    let quantity = parseInt(document.getElementById("quantity").value);
 
-    let product = {
-        id: _product._id,
-        name: _product.name,
-        type: _product.type,
-        description: _product.description,
-        imageUrl: _product.imageUrl,
-        price: _product.price,
-        optionName: GetOptionName(option_key),
-        optionValue: document.getElementById("options").value,
-        qty: document.getElementById("quantity").value
-    };
+    let cart = JSON.parse(localStorage.getItem("cart_" + _type)) || [];
+    let product = null;
 
-    localStorage.setItem("cart_" + _product.type, JSON.stringify(product));
-    console.log(JSON.parse(localStorage.getItem("cart_" + _product.type)));
+    // Check if product already exist in cart
+    // and increase its quantity
+    cart.forEach(element => {
+        if(element.id == _product._id + "-" + optionValue.replace(" ", "")) {
+            product = true;
+            element.qty += quantity;
+            return;
+        }
+    });
+
+    // Else, add product to the cart
+    if(product == null) {
+        product = {
+            _id: _product._id,
+            id: _product._id + "-" + optionValue.replace(" ", ""),
+            name: _product.name,
+            type: _type,
+            description: _product.description,
+            imageUrl: _product.imageUrl,
+            price: parseFloat(_product.price),
+            optionName: getOptionName(optionKey),
+            optionValue: optionValue,
+            qty: parseInt(quantity)
+        };
+        cart.push(product);
+    }
+    
+    localStorage.setItem("cart_" + _type, JSON.stringify(cart));
+    // console.log(JSON.parse(localStorage.getItem("cart_" + _type)));
 
     window.location.href = "/pages/cart.html";
 }

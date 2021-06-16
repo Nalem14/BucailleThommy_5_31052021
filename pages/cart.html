@@ -25,7 +25,7 @@
           </li>
           <li>
             <a href="./cart.html" class="active"
-              ><i class="fas fa-shopping-cart"></i> Panier <span>0</span></a
+              ><i class="fas fa-shopping-cart"></i> Panier <span id="cart-count">0</span></a
             >
           </li>
         </ul>
@@ -36,64 +36,46 @@
       <section id="cart">
         <h2>Produits dans votre panier</h2>
 
-        <div>
-          <article>
-            <figure>
-              <img src="https://via.placeholder.com/400" alt="" />
-            </figure>
-
-            <div>
-              <h3>Mon produit</h3>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Voluptatibus, possimus maxime. Ipsa, culpa dolores! Provident
-                deserunt nihil doloremque fugiat consequuntur dolorem,
-                reprehenderit adipisci, eos numquam quis rerum odit placeat
-                voluptas.
-              </p>
-            </div>
-
-            <form action="./cart.html" method="post">
-              <label for="quantity-1">Quantité</label>
-              <select name="quantity" id="quantity-1">
-                <option value="1">x1</option>
-              </select>
-            </form>
-
-            <span>50€</span>
-            <a href="#"><i class="fas fa-trash"></i></a>
-          </article>
-
-          <article>
-            <figure>
-              <img src="https://via.placeholder.com/400" alt="" />
-            </figure>
-
-            <div>
-              <h3>Mon produit</h3>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Voluptatibus, possimus maxime. Ipsa, culpa dolores! Provident
-                deserunt nihil doloremque fugiat consequuntur dolorem,
-                reprehenderit adipisci, eos numquam quis rerum odit placeat
-                voluptas.
-              </p>
-            </div>
-
-            <form action="./cart.html" method="post">
-              <label for="quantity-2">Quantité</label>
-              <select name="quantity" id="quantity-2">
-                <option value="1">x1</option>
-              </select>
-            </form>
-
-            <span>50€</span>
-            <a href="#"><i class="fas fa-trash"></i></a>
-          </article>
+        <div id="cart-container">
+          <p>Chargement...</p>
         </div>
 
-        <span>Total: 500€</span>
-        <a href="./order-confirmation.html" class="btn">Passer ma commande</a>
+        <span id="cart-total">Total: 0€</span>
+        <a href="#!" class="btn" id="confirm-cart">Passer ma commande</a>
+      </section>
+
+      <section id="user-info">
+        <h2>Informations de livraison</h2>
+        <form action="./order-confirmation.html" method="post" id="contact-form">
+          <div>
+            <label for="firstName">Nom</label>
+            <input type="text" name="firstName" id="firstName">
+          </div>
+
+          <div>
+            <label for="lastName">Prénom</label>
+            <input type="text" name="lastName" id="lastName">
+          </div>
+
+          <div>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">
+          </div>
+
+          <div>
+            <label for="city">Ville</label>
+            <input type="text" name="city" id="city">
+          </div>
+
+          <div>
+            <label for="address">Adresse</label>
+            <input type="text" name="address" id="address">
+          </div>
+
+          <div>
+            <button type="submit" class="btn">Valider ma commande</button>
+          </div>
+        </form>
       </section>
     </main>
 
