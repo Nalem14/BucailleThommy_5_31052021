@@ -22,11 +22,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     })
 });
 
-//
-//
-// Need to refactore, render HTML in another function
-//
-//
 function getProducts(category) {
     return fetch('http://localhost:3000/api/' + category)
     .then(response => response.json())

@@ -2,9 +2,9 @@ let categories = []
 window.addEventListener("DOMContentLoaded", (event) => {
     categories = ["teddies", "cameras", "furniture"];
 
-    GetOrderData().then(data => {
+    getOrderData().then(data => {
         console.log(data);
-        RenderOrderData(data);
+        renderOrderData(data);
 
         localStorage.clear();
     }).catch(error => {
@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 });
 
-function GetOrderData() {
+function getOrderData() {
     return new Promise((resolve, reject) => {
         try {
             let orderIds = [];
@@ -41,7 +41,7 @@ function GetOrderData() {
     });
 }
 
-function RenderOrderData(data) {
+function renderOrderData(data) {
     document.getElementById("order-id").innerHTML = "";
     data.orderIds.forEach(element => {
         if(element.trim().length > 0)
