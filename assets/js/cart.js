@@ -8,7 +8,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     getCarts().then((result) => {
         renderCart();
     }).catch((error) => {
-        document.getElementById("cart-container").innerHTML("Erreur. Impossible de charger le panier : " + error);
+        console.error(error);
+        document.getElementById("cart-container").innerHTML = "<p>Erreur. Impossible de charger le panier : " + error + "</p>";
     });
 
     // Set events to contact-form inputs
@@ -154,33 +155,34 @@ function renderCart() {
 
     if(CART.length <= 0) {
         container.innerHTML = "<p>Votre panier est vide.</p>";
-        document.getElementById("confirm-cart").style.display = "none";
         return;
     }
 
     container.innerHTML = "Chargement...";
-    document.getElementById("confirm-cart").style.display = "flex";
     CART.forEach(element => {
         // Add HTML element in var
         content += `
             <article id="product-${element.id}" data-key="${n}" data-id="${element.id}" data-type="${element.type}" data-price="${element.price * element.qty}">
                 <figure>
-                <img src="${element.imageUrl}" alt="" />
+                    <img src="${element.imageUrl}" alt="" />
                 </figure>
 
                 <div>
-                <h3>${element.name}</h3>
-                <p>
-                    ${element.description}
-                    <strong>${element.optionName}: ${element.optionValue}</strong>
-                </p>
+                    <h3>
+                        <a href="./product.html?id=${element.id.replace("-" + element.optionValue.replace(" ", ""), "")}&category=${element.type}">${element.name}</a>
+                    </h3>
+                    
+                    <p>
+                        ${element.description}
+                        <strong>${element.optionName}: ${element.optionValue}</strong>
+                    </p>
                 </div>
 
                 <form action="./cart.html" method="post">
-                <label for="quantity-${n}">Quantité</label>
-                <select name="quantity" id="quantity-${n}">
-                    ${renderQty(element.qty)}
-                </select>
+                    <label for="quantity-${n}">Quantité</label>
+                    <select name="quantity" id="quantity-${n}">
+                        ${renderQty(element.qty)}
+                    </select>
                 </form>
 
                 <span id="price-${n}">${toEuro(element.price * element.qty)}</span>
@@ -209,7 +211,9 @@ function setProductsListeners() {
 
 function onDeleteProduct(element) {
     // Add event when click on the delete button to delete the product
-    element.querySelector("a").addEventListener("click", (event) => {
+    var nodes = element.querySelectorAll('a');
+    var last = nodes[nodes.length-1];
+    last.addEventListener("click", (event) => {
         deleteProduct(element.getAttribute("data-id").toString(), element.getAttribute("data-type").toString());
     });
 }
