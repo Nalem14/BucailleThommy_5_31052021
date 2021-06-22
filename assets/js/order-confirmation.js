@@ -3,7 +3,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     categories = ["teddies", "cameras", "furniture"];
 
     getOrderData().then(data => {
-        console.log(data);
 
         if(data.orderIds.length <= 0) {
             window.location.href = "/";
@@ -24,14 +23,15 @@ function getOrderData() {
             let orderIds = [];
             let totalPrice = 0;
 
-            categories.forEach(category => {
+            for(var i = 0; i < categories.length; i++) {
+                let category = categories[i];
+
                 let id = localStorage.getItem("order-id-confirmation-" + category);
-                if(id == null) {
-                    return;
-                }
+                if(id == null)
+                    continue;
 
                 orderIds.push(getCategoryName(category) + ": " + id);
-            })
+            }
 
             totalPrice = parseFloat(localStorage.getItem("order-price-confirmation"));
 
@@ -65,11 +65,11 @@ function getCategoryName(type) {
 
     switch(type) {
         case "teddies":
-            str = "Ours";
+            str = "Ours en peluche";
         break;
 
         case "cameras":
-            str = "Cameras";
+            str = "Caméras";
         break;
 
         case "furniture":

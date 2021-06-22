@@ -8,7 +8,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     getCarts().then((result) => {
         renderCart();
     }).catch((error) => {
-        console.error(error);
         document.getElementById("cart-container").innerHTML = "<p>Erreur. Impossible de charger le panier : " + error + "</p>";
     });
 
@@ -45,16 +44,17 @@ function handleCartSubmit(event) {
     }
 
     // For each categories, submit the cart
-    let orderIds = {}, totalPrice = 0;
+    let orderIds = {}, totalPrice = 0, nbPassed = 0;
     let promise = new Promise((resolve) => {
-        categories.forEach((category, index) => {
+        categories.forEach((category) => {
 
             // Get products of the current category
             getCarts(category).then(products => {
 
-                // Check if category is used in the cart, else stop forEach
+                // Check if category is used in the cart, else stop the request for this category
                 if(products.length <= 0) {
-                    if(index == categories.length-1)
+                    nbPassed++;
+                    if(nbPassed == categories.length)
                         resolve();
                     return;
                 }
@@ -80,14 +80,15 @@ function handleCartSubmit(event) {
                 }).then(function(data) {
                     // console.log(data);
                     orderIds[category] = data.orderId;
-                    if(index == categories.length-1)
+                    nbPassed++;
+                    if(nbPassed == categories.length)
                         resolve();
                 });
             });
         });
     });
 
-    promise.then(() => {
+    promise.then(() => {        
         // Clear carts
         clearCarts();
 
