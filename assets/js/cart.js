@@ -385,6 +385,11 @@ function checkInput(input) {
         case "validateStringAndNumber":
             validation = validateStringAndNumber(input.value);
         break;
+
+        default:
+            // Validation type not exist, so don't do check
+            validation = true;
+        break;
     }
 
     return validation;
