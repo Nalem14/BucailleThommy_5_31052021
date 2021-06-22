@@ -276,6 +276,11 @@ function renderQty(selected) {
         qty += `<option value="${i+1}" ${str}>x${i+1}</option>`;
     }
 
+    // Add custom option for current quantity, to prevent quantity not showed if to upper
+    if(selected > 10) {
+        qty += `<option value="${selected}" selected>x${selected}</option>`;
+    }
+
     return qty;
 }
 
