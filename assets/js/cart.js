@@ -49,16 +49,15 @@ function handleCartSubmit(event) {
     let promise = new Promise((resolve) => {
         categories.forEach((category, index) => {
 
-            // Check if category is used in the cart, else stop forEach
-            if(window["CART_" + category.toUpperCase()].length <= 0) {
-                if(index == categories.length-1)
-                    resolve();
-
-                return;
-            }
-
             // Get products of the current category
             getCarts(category).then(products => {
+
+                // Check if category is used in the cart, else stop forEach
+                if(products.length <= 0) {
+                    if(index == categories.length-1)
+                        resolve();
+                    return;
+                }
 
                 let productsId = [];
                 products.forEach(product => {
@@ -66,7 +65,7 @@ function handleCartSubmit(event) {
                     totalPrice += product.price * product.qty;
                     // Add product id to submit later
                     productsId.push(product._id);
-                })
+                });
 
                 // Send request to the API of the current category
                 fetch('http://localhost:3000/api/' + category + "/order", {
@@ -84,7 +83,7 @@ function handleCartSubmit(event) {
                     if(index == categories.length-1)
                         resolve();
                 });
-            })
+            });
         });
     });
 
@@ -105,9 +104,9 @@ function saveOrderDatas(orderIds, price) {
 
     categories.forEach(category => {
         localStorage.removeItem("order-id-confirmation-" + category);
-        if(typeof(orderIds[category]) != "undefined")
+        if(orderIds[category] != null)
             localStorage.setItem("order-id-confirmation-" + category, orderIds[category]);
-    })
+    });
 
     localStorage.removeItem("order-price-confirmation");
     localStorage.setItem("order-price-confirmation", price);

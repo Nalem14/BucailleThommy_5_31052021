@@ -4,6 +4,12 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     getOrderData().then(data => {
         console.log(data);
+
+        if(data.orderIds.length <= 0) {
+            window.location.href = "/";
+            return;
+        }
+
         renderOrderData(data);
 
         localStorage.clear();
@@ -20,12 +26,11 @@ function getOrderData() {
 
             categories.forEach(category => {
                 let id = localStorage.getItem("order-id-confirmation-" + category);
-                if(typeof(id) == "undefined") {
-                    reject();
+                if(id == null) {
                     return;
                 }
 
-                orderIds.push(id);
+                orderIds.push(getCategoryName(category) + ": " + id);
             })
 
             totalPrice = parseFloat(localStorage.getItem("order-price-confirmation"));
@@ -53,4 +58,28 @@ function renderOrderData(data) {
 function toEuro(number) {
     number = number/100;
     return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(number);
+}
+
+function getCategoryName(type) {
+    let str = "";
+
+    switch(type) {
+        case "teddies":
+            str = "Ours";
+        break;
+
+        case "cameras":
+            str = "Cameras";
+        break;
+
+        case "furniture":
+            str = "Meubles";
+        break;
+
+        default:
+            str = "Unknown";
+        break;
+    }
+
+    return str;
 }
