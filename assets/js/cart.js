@@ -11,11 +11,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
         document.getElementById("cart-container").innerHTML("Erreur. Impossible de charger le panier : " + error);
     });
 
-    // When confirm cart, show contact form and focus first input
-    document.getElementById("confirm-cart").addEventListener("click", (event) => {
-        confirmCart(event);
-        setContactListener();
-    });
+    // Set events to contact-form inputs
+    setContactListener();
 
     // When validate contact form, submit cart
     document.getElementById("contact-form").addEventListener("submit", (event) => {
@@ -28,27 +25,16 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 });
 
-function confirmCart(event) {
-    // Show contact form
-    document.getElementById("user-info").style.display = "flex";
-
-    // Hide confirm cart button
-    event.target.style.display = "none";
-
-    // Focus first input
-    document.querySelector("input[name=firstName]").select();
-
-    // Scroll to section
-    document.getElementById("user-info").scrollIntoView();
-}
-
 function handleCartSubmit(event) {
+
+    // Get all inputs values
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let email = document.getElementById("email").value;
     let city = document.getElementById("city").value;
     let address = document.getElementById("address").value;
 
+    // Construct the contact object
     let contact = {
         firstName: firstName,
         lastName: lastName,
@@ -57,18 +43,31 @@ function handleCartSubmit(event) {
         address: address
     }
 
+    // For each categories, submit the cart
     let orderIds = {}, totalPrice = 0;
     let promise = new Promise((resolve) => {
         categories.forEach((category, index) => {
 
+            // Check if category is used in the cart, else stop forEach
+            if(window["CART_" + category.toUpperCase()].length <= 0) {
+                if(index == categories.length-1)
+                    resolve();
+
+                return;
+            }
+
+            // Get products of the current category
             getCarts(category).then(products => {
 
                 let productsId = [];
                 products.forEach(product => {
+                    // Increase total price to save it later
                     totalPrice += product.price * product.qty;
+                    // Add product id to submit later
                     productsId.push(product._id);
                 })
 
+                // Send request to the API of the current category
                 fetch('http://localhost:3000/api/' + category + "/order", {
                     headers: {
                         'Accept': 'application/json',
@@ -101,6 +100,8 @@ function handleCartSubmit(event) {
 }
 
 function saveOrderDatas(orderIds, price) {
+    // Save all order id and total price
+
     categories.forEach(category => {
         localStorage.removeItem("order-id-confirmation-" + category);
         if(typeof(orderIds[category]) != "undefined")
@@ -112,7 +113,10 @@ function saveOrderDatas(orderIds, price) {
 }
 
 function clearCarts() {
+    // Remove all datas in localStorage
     localStorage.clear();
+
+    // Remove each element in the cart view
     document.querySelectorAll("artilcle").forEach(element => {
         element.remove();
     });
@@ -204,12 +208,14 @@ function setProductsListeners() {
 }
 
 function onDeleteProduct(element) {
+    // Add event when click on the delete button to delete the product
     element.querySelector("a").addEventListener("click", (event) => {
         deleteProduct(element.getAttribute("data-id").toString(), element.getAttribute("data-type").toString());
     });
 }
 
 function onChangeQuantity(element) {
+    // Add event when change quantity
     element.querySelector("form").addEventListener("change", (event) => {
         let key = element.getAttribute("data-key");
         let type = element.getAttribute("data-type");
@@ -244,11 +250,14 @@ function toEuro(number) {
 
 function renderTotalPrice() {
     let total = 0;
+
+    // Calculate total price of all elements in the cart
     document.querySelectorAll("#cart-container article").forEach(element => {
         total += parseInt(element.getAttribute("data-price"));
         document.getElementById("price-" + element.getAttribute("data-key")).innerHTML = toEuro(element.getAttribute("data-price"));
     });
 
+    // Render total price in the view
     document.getElementById("cart-total").innerHTML = "Total: " + toEuro(total);
 }
 
@@ -351,27 +360,33 @@ function setInputValid(valid, input) {
 function checkInput(input) {
 
     let validation = false;
-    switch(input.name) {
-        case "firstName":
-        case "lastName":
-            validation = validateName(input.value);
+    switch(input.getAttribute("data-validation")) {
+        case "validateStringFr":
+            validation = validateStringFr(input.value);
         break;
 
-        case "email":
+        case "validateEmail":
             validation = validateEmail(input.value);
         break;
 
-        case "address":
-        case "city":
-            validation = validateCityOrAddress(input.value);
+        case "validateStringOnly":
+            validation = validateStringOnly(input.value);
+        break;
+
+        case "validateStringAndNumber":
+            validation = validateStringAndNumber(input.value);
         break;
     }
 
     return validation;
 }
 
-function validateCityOrAddress(value) {
+function validateStringAndNumber(value) {
     return !/[^a-zA-Z0-9 ]/.test(value) && value.trim().length > 3 && value.trim().length < 60;
+}
+
+function validateStringOnly(value) {
+    return !/[^a-zA-Z ]/.test(value) && value.trim().length > 3 && value.trim().length < 60;
 }
 
 function validateEmail(email) {
@@ -379,6 +394,6 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-function validateName(name) {
-    return !/[^a-zA-Z0-9éèÉÈêÊëË ]/.test(name) && name.trim().length >= 3 && name.trim().length < 25;
+function validateStringFr(name) {
+    return !/[^a-zA-ZéèÉÈêÊëË ]/.test(name) && name.trim().length >= 3 && name.trim().length < 25;
 }
