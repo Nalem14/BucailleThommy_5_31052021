@@ -49,12 +49,12 @@ main {
 
             &:hover {
                 transition: border .4s linear;
-                border: 3px solid lighten($color: $color-secondary, $amount: 40);
+                border: 2px solid lighten($color: $color-secondary, $amount: 40);
             }
 
             &:active {
                 transition: border .2s linear;
-                border: 3px solid darken($color: $color-secondary, $amount: 15);
+                border: 2px solid darken($color: $color-secondary, $amount: 15);
             }
         }
     }

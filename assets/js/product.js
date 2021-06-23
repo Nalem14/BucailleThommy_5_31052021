@@ -121,7 +121,7 @@ function addToCart(event, _product, _type) {
 
     let optionKey = getOptionKey(_product);
     let optionValue = document.getElementById("options").value;
-    let quantity = parseInt(document.getElementById("quantity").value);
+    let quantity = Number(document.getElementById("quantity").value);
 
     let cart = JSON.parse(localStorage.getItem("cart_" + _type)) || [];
     let product = null;
@@ -148,7 +148,7 @@ function addToCart(event, _product, _type) {
             price: parseFloat(_product.price),
             optionName: getOptionName(optionKey),
             optionValue: optionValue,
-            qty: parseInt(quantity)
+            qty: Number(quantity)
         };
         cart.push(product);
     }

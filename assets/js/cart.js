@@ -8,14 +8,11 @@ window.addEventListener("DOMContentLoaded", (event) => {
     getCarts().then((result) => {
         renderCart();
     }).catch((error) => {
-        document.getElementById("cart-container").innerHTML("Erreur. Impossible de charger le panier : " + error);
+        document.getElementById("cart-container").innerHTML = "<p>Erreur. Impossible de charger le panier : " + error + "</p>";
     });
 
-    // When confirm cart, show contact form and focus first input
-    document.getElementById("confirm-cart").addEventListener("click", (event) => {
-        confirmCart(event);
-        setContactListener();
-    });
+    // Set events to contact-form inputs
+    setContactListener();
 
     // When validate contact form, submit cart
     document.getElementById("contact-form").addEventListener("submit", (event) => {
@@ -28,27 +25,16 @@ window.addEventListener("DOMContentLoaded", (event) => {
     });
 });
 
-function confirmCart(event) {
-    // Show contact form
-    document.getElementById("user-info").style.display = "flex";
-
-    // Hide confirm cart button
-    event.target.style.display = "none";
-
-    // Focus first input
-    document.querySelector("input[name=firstName]").select();
-
-    // Scroll to section
-    document.getElementById("user-info").scrollIntoView();
-}
-
 function handleCartSubmit(event) {
+
+    // Get all inputs values
     let firstName = document.getElementById("firstName").value;
     let lastName = document.getElementById("lastName").value;
     let email = document.getElementById("email").value;
     let city = document.getElementById("city").value;
     let address = document.getElementById("address").value;
 
+    // Construct the contact object
     let contact = {
         firstName: firstName,
         lastName: lastName,
@@ -57,18 +43,31 @@ function handleCartSubmit(event) {
         address: address
     }
 
-    let orderIds = {}, totalPrice = 0;
+    // For each categories, submit the cart
+    let orderIds = {}, totalPrice = 0, nbPassed = 0;
     let promise = new Promise((resolve) => {
-        categories.forEach((category, index) => {
+        categories.forEach((category) => {
 
+            // Get products of the current category
             getCarts(category).then(products => {
+
+                // Check if category is used in the cart, else stop the request for this category
+                if(products.length <= 0) {
+                    nbPassed++;
+                    if(nbPassed == categories.length)
+                        resolve();
+                    return;
+                }
 
                 let productsId = [];
                 products.forEach(product => {
+                    // Increase total price to save it later
                     totalPrice += product.price * product.qty;
+                    // Add product id to submit later
                     productsId.push(product._id);
-                })
+                });
 
+                // Send request to the API of the current category
                 fetch('http://localhost:3000/api/' + category + "/order", {
                     headers: {
                         'Accept': 'application/json',
@@ -81,14 +80,15 @@ function handleCartSubmit(event) {
                 }).then(function(data) {
                     // console.log(data);
                     orderIds[category] = data.orderId;
-                    if(index == categories.length-1)
+                    nbPassed++;
+                    if(nbPassed == categories.length)
                         resolve();
                 });
-            })
+            });
         });
     });
 
-    promise.then(() => {
+    promise.then(() => {        
         // Clear carts
         clearCarts();
 
@@ -101,18 +101,23 @@ function handleCartSubmit(event) {
 }
 
 function saveOrderDatas(orderIds, price) {
+    // Save all order id and total price
+
     categories.forEach(category => {
         localStorage.removeItem("order-id-confirmation-" + category);
-        if(typeof(orderIds[category]) != "undefined")
+        if(orderIds[category] != null)
             localStorage.setItem("order-id-confirmation-" + category, orderIds[category]);
-    })
+    });
 
     localStorage.removeItem("order-price-confirmation");
     localStorage.setItem("order-price-confirmation", price);
 }
 
 function clearCarts() {
+    // Remove all datas in localStorage
     localStorage.clear();
+
+    // Remove each element in the cart view
     document.querySelectorAll("artilcle").forEach(element => {
         element.remove();
     });
@@ -150,33 +155,34 @@ function renderCart() {
 
     if(CART.length <= 0) {
         container.innerHTML = "<p>Votre panier est vide.</p>";
-        document.getElementById("confirm-cart").style.display = "none";
         return;
     }
 
     container.innerHTML = "Chargement...";
-    document.getElementById("confirm-cart").style.display = "flex";
     CART.forEach(element => {
         // Add HTML element in var
         content += `
             <article id="product-${element.id}" data-key="${n}" data-id="${element.id}" data-type="${element.type}" data-price="${element.price * element.qty}">
                 <figure>
-                <img src="${element.imageUrl}" alt="" />
+                    <img src="${element.imageUrl}" alt="" />
                 </figure>
 
                 <div>
-                <h3>${element.name}</h3>
-                <p>
-                    ${element.description}
-                    <strong>${element.optionName}: ${element.optionValue}</strong>
-                </p>
+                    <h3>
+                        <a href="./product.html?id=${element.id.replace("-" + element.optionValue.replace(" ", ""), "")}&category=${element.type}">${element.name}</a>
+                    </h3>
+                    
+                    <p>
+                        ${element.description}
+                        <strong>${element.optionName}: ${element.optionValue}</strong>
+                    </p>
                 </div>
 
                 <form action="./cart.html" method="post">
-                <label for="quantity-${n}">Quantité</label>
-                <select name="quantity" id="quantity-${n}">
-                    ${renderQty(element.qty)}
-                </select>
+                    <label for="quantity-${n}">Quantité</label>
+                    <select name="quantity" id="quantity-${n}">
+                        ${renderQty(element.qty)}
+                    </select>
                 </form>
 
                 <span id="price-${n}">${toEuro(element.price * element.qty)}</span>
@@ -204,12 +210,16 @@ function setProductsListeners() {
 }
 
 function onDeleteProduct(element) {
-    element.querySelector("a").addEventListener("click", (event) => {
+    // Add event when click on the delete button to delete the product
+    var nodes = element.querySelectorAll('a');
+    var last = nodes[nodes.length-1];
+    last.addEventListener("click", (event) => {
         deleteProduct(element.getAttribute("data-id").toString(), element.getAttribute("data-type").toString());
     });
 }
 
 function onChangeQuantity(element) {
+    // Add event when change quantity
     element.querySelector("form").addEventListener("change", (event) => {
         let key = element.getAttribute("data-key");
         let type = element.getAttribute("data-type");
@@ -244,11 +254,14 @@ function toEuro(number) {
 
 function renderTotalPrice() {
     let total = 0;
+
+    // Calculate total price of all elements in the cart
     document.querySelectorAll("#cart-container article").forEach(element => {
         total += parseInt(element.getAttribute("data-price"));
         document.getElementById("price-" + element.getAttribute("data-key")).innerHTML = toEuro(element.getAttribute("data-price"));
     });
 
+    // Render total price in the view
     document.getElementById("cart-total").innerHTML = "Total: " + toEuro(total);
 }
 
@@ -261,6 +274,11 @@ function renderQty(selected) {
             str = "selected";
 
         qty += `<option value="${i+1}" ${str}>x${i+1}</option>`;
+    }
+
+    // Add custom option for current quantity, to prevent quantity not showed if to upper
+    if(selected > 10) {
+        qty += `<option value="${selected}" selected>x${selected}</option>`;
     }
 
     return qty;
@@ -351,27 +369,38 @@ function setInputValid(valid, input) {
 function checkInput(input) {
 
     let validation = false;
-    switch(input.name) {
-        case "firstName":
-        case "lastName":
-            validation = validateName(input.value);
+    switch(input.getAttribute("data-validation")) {
+        case "validateStringFr":
+            validation = validateStringFr(input.value);
         break;
 
-        case "email":
+        case "validateEmail":
             validation = validateEmail(input.value);
         break;
 
-        case "address":
-        case "city":
-            validation = validateCityOrAddress(input.value);
+        case "validateStringOnly":
+            validation = validateStringOnly(input.value);
+        break;
+
+        case "validateStringAndNumber":
+            validation = validateStringAndNumber(input.value);
+        break;
+
+        default:
+            // Validation type not exist, so don't do check
+            validation = true;
         break;
     }
 
     return validation;
 }
 
-function validateCityOrAddress(value) {
+function validateStringAndNumber(value) {
     return !/[^a-zA-Z0-9 ]/.test(value) && value.trim().length > 3 && value.trim().length < 60;
+}
+
+function validateStringOnly(value) {
+    return !/[^a-zA-Z ]/.test(value) && value.trim().length > 3 && value.trim().length < 60;
 }
 
 function validateEmail(email) {
@@ -379,6 +408,6 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-function validateName(name) {
-    return !/[^a-zA-Z0-9éèÉÈêÊëË ]/.test(name) && name.trim().length >= 3 && name.trim().length < 25;
+function validateStringFr(name) {
+    return !/[^a-zA-ZéèÉÈêÊëË ]/.test(name) && name.trim().length >= 3 && name.trim().length < 25;
 }

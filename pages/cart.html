@@ -41,7 +41,6 @@
         </div>
 
         <span id="cart-total">Total: 0€</span>
-        <a href="#!" class="btn" id="confirm-cart">Passer ma commande</a>
       </section>
 
       <section id="user-info">
@@ -49,31 +48,31 @@
         <form action="./order-confirmation.html" method="post" id="contact-form">
           <div>
             <label for="firstName">Nom</label>
-            <input type="text" name="firstName" id="firstName">
+            <input type="text" data-validation="validateStringFr" name="firstName" id="firstName">
             <p class="error hidden">Veuillez spécifier un nom entre 3 et 25 caractères, sans caractères spéciaux.</p>
           </div>
 
           <div>
             <label for="lastName">Prénom</label>
-            <input type="text" name="lastName" id="lastName">
+            <input type="text" data-validation="validateStringFr" name="lastName" id="lastName">
             <p class="error hidden">Veuillez spécifier un prénom entre 3 et 25 caractères, sans caractères spéciaux.</p>
           </div>
 
           <div>
             <label for="email">Email</label>
-            <input type="text" name="email" id="email">
-            <p class="error hidden">Veuillez spécifier email valide</p>
+            <input type="text" data-validation="validateEmail" name="email" id="email">
+            <p class="error hidden">Veuillez spécifier un email valide</p>
           </div>
 
           <div>
             <label for="city">Ville</label>
-            <input type="text" name="city" id="city">
+            <input type="text" data-validation="validateStringOnly" name="city" id="city">
             <p class="error hidden">Veuillez spécifier votre ville sans caractères spéciaux</p>
           </div>
 
           <div>
             <label for="address">Adresse</label>
-            <input type="text" name="address" id="address">
+            <input type="text" data-validation="validateStringAndNumber" name="address" id="address">
             <p class="error hidden">Veuillez spécifier votre adresse sans caractères spéciaux</p>
           </div>
 
