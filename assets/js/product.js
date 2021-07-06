@@ -17,19 +17,24 @@ window.addEventListener("DOMContentLoaded", async (event) => {
     const category = url.searchParams.get("category");
 
     // Get product from params
-    const product = await getProduct(category, id);
+    try {
+        const product = await getProduct(category, id);
 
-    // Set window title and meta description
-    document.title = product.name + " - Orinoco";
-    document.querySelector('meta[name="description"]').setAttribute("content", product.description);
+        // Set window title and meta description
+        document.title = product.name + " - Orinoco";
+        document.querySelector('meta[name="description"]').setAttribute("content", product.description);
 
-    // Render product datas in HTML
-    renderProduct(product);
+        // Render product datas in HTML
+        renderProduct(product);
 
-    // Listen when submit Add to cart
-    document.getElementById("add-to-cart-form").addEventListener("submit", (event) => {
-        addToCart(event, product, category);
-    });
+        // Listen when submit Add to cart
+        document.getElementById("add-to-cart-form").addEventListener("submit", (event) => {
+            addToCart(event, product, category);
+        });
+    }
+    catch(error) {
+        document.getElementById("product-item").innerHTML = "<p>Erreur: Impossible de charger les données de ce produit.<br>" + error + "</p>"
+    }
 });
 
 async function getProduct(_category, _id) {
