@@ -75,6 +75,14 @@ main {
             margin-top: 40px;
         }
 
+        #products-container > p {
+            flex-basis: 100%;
+            text-align: center;
+            font-size: 1.1em;
+            color: rgb(174, 44, 44);
+            padding: 20px;
+        }
+
         h2 {
             font-size: 1.3em;
             font-weight: 700;

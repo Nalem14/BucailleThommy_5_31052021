@@ -1,23 +1,31 @@
 window.addEventListener("DOMContentLoaded", (event) => {
     getProducts("teddies").then(result => {
         renderProducts(result, "teddies");
+    }).catch(error => {
+        document.getElementById("products-container").innerHTML = "<p>Erreur: Impossible de charger les données. Veuillez ré-essayer ou contacter un administrateur.<br>"+ error +"</p>";
     });
 
     document.getElementById("teddies").addEventListener("click", () => {
         getProducts("teddies").then(result => {
             renderProducts(result, "teddies");
+        }).catch(error => {
+            document.getElementById("products-container").innerHTML = "<p>Erreur: Impossible de charger les données. Veuillez ré-essayer ou contacter un administrateur.<br>"+ error +"</p>";
         });
     })
 
     document.getElementById("cameras").addEventListener("click", () => {
         getProducts("cameras").then(result => {
             renderProducts(result, "cameras");
+        }).catch(error => {
+            document.getElementById("products-container").innerHTML = "<p>Erreur: Impossible de charger les données. Veuillez ré-essayer ou contacter un administrateur.<br>"+ error +"</p>";
         });
     })
 
     document.getElementById("furnitures").addEventListener("click", () => {
         getProducts("furniture").then(result => {
             renderProducts(result, "furniture");
+        }).catch(error => {
+            document.getElementById("products-container").innerHTML = "<p>Erreur: Impossible de charger les données. Veuillez ré-essayer ou contacter un administrateur.<br>"+ error +"</p>";
         });
     })
 });
