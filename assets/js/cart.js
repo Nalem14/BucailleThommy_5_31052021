@@ -45,7 +45,7 @@ function handleCartSubmit(event) {
 
     // For each categories, submit the cart
     let orderIds = {}, totalPrice = 0, nbPassed = 0;
-    let promise = new Promise((resolve) => {
+    let promise = new Promise((resolve, reject) => {
         categories.forEach((category) => {
 
             // Get products of the current category
@@ -83,6 +83,9 @@ function handleCartSubmit(event) {
                     nbPassed++;
                     if(nbPassed == categories.length)
                         resolve();
+                }).catch(error => {
+                    document.getElementById("cart-container").innerHTML = "<p>Erreur: Impossible de valider le panier. Ré-essayez ou contacter un administrateur.<br>" + error + "</p>";
+                    reject();
                 });
             });
         });
