@@ -339,7 +339,7 @@ function checkCanSubmit() {
     let can = true;
 
     return new Promise((resolve, reject) => {
-        let inputs = document.querySelectorAll("#contact-form input");
+        let inputs = document.querySelectorAll("#contact-form input, #contact-form button");
         for(var i = 0; i < inputs.length; i++) {
             let input = inputs[i];
             let valid = checkInput(input);
@@ -386,6 +386,10 @@ function checkInput(input) {
             validation = validateStringAndNumber(input.value);
         break;
 
+        case "validateEmptyCart":
+            validation = validateEmptyCart();
+        break;
+
         default:
             // Validation type not exist, so don't do check
             validation = true;
@@ -396,11 +400,11 @@ function checkInput(input) {
 }
 
 function validateStringAndNumber(value) {
-    return !/[^a-zA-Z0-9 ]/.test(value) && value.trim().length > 3 && value.trim().length < 60;
+    return !/[^a-zA-Z0-9 ]/.test(value) && value.trim().length >= 3 && value.trim().length < 60;
 }
 
 function validateStringOnly(value) {
-    return !/[^a-zA-Z ]/.test(value) && value.trim().length > 3 && value.trim().length < 60;
+    return !/[^a-zA-Z ]/.test(value) && value.trim().length >= 3 && value.trim().length < 60;
 }
 
 function validateEmail(email) {
@@ -410,4 +414,11 @@ function validateEmail(email) {
 
 function validateStringFr(name) {
     return !/[^a-zA-ZéèÉÈêÊëË ]/.test(name) && name.trim().length >= 3 && name.trim().length < 25;
+}
+
+function validateEmptyCart() {
+    if(CART.length <= 0)
+        return false;
+
+    return true;
 }

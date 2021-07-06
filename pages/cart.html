@@ -67,17 +67,18 @@
           <div>
             <label for="city">Ville</label>
             <input type="text" data-validation="validateStringOnly" name="city" id="city">
-            <p class="error hidden">Veuillez spécifier votre ville sans caractères spéciaux</p>
+            <p class="error hidden">Veuillez spécifier une ville entre 3 et 60 caractères, sans caractères spéciaux</p>
           </div>
 
           <div>
             <label for="address">Adresse</label>
             <input type="text" data-validation="validateStringAndNumber" name="address" id="address">
-            <p class="error hidden">Veuillez spécifier votre adresse sans caractères spéciaux</p>
+            <p class="error hidden">Veuillez spécifier une adresse entre 3 et 60 caractères, sans caractères spéciaux</p>
           </div>
 
           <div>
-            <button type="submit" class="btn">Valider ma commande</button>
+            <button type="submit" data-validation="validateEmptyCart" class="btn">Valider ma commande</button>
+            <p class="error hidden">Votre panier est vide, ajoutez un produit pour envoyer le formulaire.</p>
           </div>
         </form>
       </section>
